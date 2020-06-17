@@ -1,0 +1,4032 @@
+{
+	"info": {
+		"_postman_id": "dc96c2f7-5ceb-43ad-a16a-6ccad55d1b42",
+		"name": "Testing app",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Tests",
+			"item": [
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "get home API url",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "029f0113-9427-4da2-a63e-b683b818c5d5",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "0b5579ba-5041-488c-bbd9-249832ddfa00",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response);\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"     pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.globals.set(\"BaseUrl\", \"https://api-demo.daniel-avellaneda.com\");\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://vue-demo.daniel-avellaneda.com",
+									"protocol": "https",
+									"host": [
+										"vue-demo",
+										"daniel-avellaneda",
+										"com"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/login -  get token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "7963388a-3e45-4618-8e83-306cdb9cd741",
+										"exec": [
+											"\r",
+											"let response = pm.response.json();\r",
+											"console.log(response)\r",
+											"let token = response.token\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"It should GET token (profile)\", function () {\r",
+											"    pm.expect(response).to.be.an(\"object\");\r",
+											"    pm.expect(response).to.have.property(\"token\");\r",
+											"    pm.expect(response).to.have.property(\"user\");\r",
+											"});\r",
+											"\r",
+											"pm.environment.set(\"Token\", response.token);\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "64310171-22c8-400a-befb-8f09ad6d4813",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "email",
+											"value": "{{Email}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "{{Password}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/login",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/register - post register",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "1ce9956a-14b4-4113-aa07-75f3bd9c12fe",
+										"exec": [
+											"\r",
+											"let response = pm.response.json();\r",
+											"console.log(response)\r",
+											"let token = response.token\r",
+											"\r",
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"it should POST register\", function () {\r",
+											"    pm.expect(response).to.be.an(\"object\");\r",
+											"    pm.expect(response).to.have.property(\"token\");\r",
+											"    pm.expect(response).to.have.property(\"user\");\r",
+											"})\r",
+											"\r",
+											"pm.environment.set(\"UserToken\", response.token);\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "33984ad7-815c-4f66-99e1-b69f9c1b0b73",
+										"exec": [
+											"const uuid = require('uuid')\r",
+											"let email = uuid() + '@domain.com'\r",
+											"pm.environment.set('Email', email)\r",
+											"\r",
+											"console.log(email)\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "Marina",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "{{Email}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "12345",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/register",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/register - not post register with the same email",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "b05cc2e4-a91d-40d8-963f-e5ed71c2dae3",
+										"exec": [
+											"\r",
+											"let response = pm.response.json();\r",
+											"console.log(response)\r",
+											"console.log(response.errors.msg)\r",
+											"\r",
+											"\r",
+											"pm.test(\"Status code is 422\", function () {\r",
+											"    pm.response.to.have.status(422);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"it should not post register if email already exists\", function () {\r",
+											"    pm.expect(response).to.be.an(\"object\");\r",
+											"    pm.expect(response).to.have.property(\"errors\");\r",
+											"    pm.expect(response.errors.msg).to.eql(\"EMAIL_ALREADY_EXISTS\");\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "f9ff6d1b-9b37-42a8-bda5-ffa3200572bf",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "Pera",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "{{Email}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "12345",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/register",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/profile - get profile",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "839c4040-3295-4564-b4f6-d3a9bd821913",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response);\r",
+											"let verification = response.verification\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"It should GET verification code\", function () {\r",
+											"     pm.expect(response).to.have.property(\"verification\");\r",
+											"});\r",
+											"pm.environment.set(\"Verification\", response.verification);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{BaseUrl}}/profile",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"profile"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/verify - post verify",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "b69e4319-c956-4c98-ae78-2f0aa62f552f",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response);\r",
+											"console.log(response.email);\r",
+											"console.log(response.verified);\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"It should post verify\", function () {\r",
+											"    pm.expect(response).to.be.an(\"object\");\r",
+											"    pm.expect(response).to.include.keys(\"email\",\"verified\");\r",
+											"\r",
+											"});\r",
+											"pm.test(\"Is verified\", function () {\r",
+											"    pm.expect(response.verified).to.be.true;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "id",
+											"value": "{{Verification}}",
+											"description": "verification code from My profile",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/verify",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"verify"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/forgot -  post forgot",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "95169e2c-05fc-439a-b8c8-941cb9f00c4f",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response);\r",
+											"console.log(response.msg);\r",
+											"\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"It should POST forgot\", function () {\r",
+											"    pm.expect(response).to.be.an(\"object\");\r",
+											"    pm.expect(response).to.have.property(\"email\");\r",
+											"    pm.expect(response).to.have.property(\"msg\");\r",
+											"    pm.expect(response.msg).to.equal(\"RESET_EMAIL_SENT\");\r",
+											"    pm.expect(response.email).to.equal(pm.environment.get(\"Email\"));\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "email",
+											"value": "{{Email}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/forgot",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"forgot"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/token - not be able to consume the route",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c575a6b7-98ea-4053-968b-400f64e7b856",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response);\r",
+											"let token = response.token\r",
+											"\r",
+											"pm.test(\"Status code is 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": ""
+									}
+								],
+								"url": {
+									"raw": "{{BaseUrl}}/token",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"token"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/token - get a fresh token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "5ed7d58f-3caf-4861-9064-e7bdadd5f0b5",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response);\r",
+											"let token = response.token\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"it should GET a fresh token\", function () {\r",
+											"    pm.expect(response).to.have.property(\"token\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BaseUrl}}/token",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"token"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Cities",
+					"item": [
+						{
+							"name": "/login -it should get token (city)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "4d834de5-0d6d-455d-890e-4e9966be3ff3",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response)\r",
+											"console.log(response.token)\r",
+											"\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(\"It should GET token (city)\", function () {\r",
+											"    pm.expect(response).to.be.an(\"object\");\r",
+											"    pm.expect(response).to.have.property(\"token\");\r",
+											"});\r",
+											"\r",
+											"pm.environment.set(\"Token\", response.token);\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "email",
+											"value": "{{Email}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "{{Password}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/login",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/cities - not be able to consume the route",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "28d275a6-0a8e-413c-8c03-a0cc867075df",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response)\r",
+											"\r",
+											"pm.test(\"Status code is 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "email",
+											"value": "admin@admin.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "12345",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/cities",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"cities"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/cities - get all the cities",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "05d7b0e6-440f-49dd-909d-8367e3cf206b",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response)\r",
+											"console.log(response.docs)\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"It should GET all the cities\", function () {\r",
+											"    pm.expect(response).to.be.an(\"object\");\r",
+											"    pm.expect(response.docs).to.be.an(\"array\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "",
+										"type": "text",
+										"value": "",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{BaseUrl}}/cities",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"cities"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/cities - it should get the cities with filters",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "dd8219ba-9072-44ba-a9a5-c591515da274",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response)\r",
+											"console.log(response.docs)\r",
+											"console.log(response.docs[0])\r",
+											"console.log(response.docs[0].name)\r",
+											"\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"It should GET the cities with filters\", function () {\r",
+											"    pm.expect(response).to.be.an(\"object\");\r",
+											"    pm.expect(response).to.have.property(\"docs\");\r",
+											"    pm.expect(response.docs).to.be.an(\"array\");\r",
+											"    pm.expect(response.docs).to.have.lengthOf(1);\r",
+											"    pm.expect(response.docs[0]).to.have.property(\"name\");\r",
+											"    pm.expect(response.docs[0].name).to.equal(\"Bucaramanga\");\r",
+											"});\r",
+											"pm.environment.set(\"CityId\", response.docs[0]._id);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"description": "Admin env",
+										"key": "Authorization",
+										"type": "text",
+										"value": "",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/cities?fields=name&filter=Bucaramanga",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"cities"
+									],
+									"query": [
+										{
+											"key": "fields",
+											"value": "name"
+										},
+										{
+											"key": "filter",
+											"value": "Bucaramanga"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/cities - not post a city without name",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "7ef73f09-362d-457a-a9f3-974b4c5717a5",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response)\r",
+											"console.log(response.errors)\r",
+											"\r",
+											"pm.test(\"Status code is 422\", function () {\r",
+											"    pm.response.to.have.status(422);\r",
+											"});\r",
+											"pm.test(\"It should NOT post a city without name\", function () {\r",
+											"    pm.expect(response).to.be.an(\"object\");\r",
+											"    pm.expect(response).to.have.property(\"errors\")\r",
+											"}); "
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/cities",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"cities"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/cities -  post a city",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "6ce8c39d-74b2-4e57-a531-f374f55c4eb5",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response)\r",
+											"console.log(response.name)\r",
+											"console.log(response._id)\r",
+											"\r",
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});\r",
+											"pm.test(\"It should POST a city\", function () {\r",
+											"    pm.expect(response).to.be.an(\"object\");\r",
+											"    pm.expect(response).to.have.property(\"name\");\r",
+											"    pm.expect(response).to.have.property(\"_id\");\r",
+											"});\r",
+											"\r",
+											"pm.environment.set(\"CityId\", response._id);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "Nish",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/cities",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"cities"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/cities -  not post a city that already exists",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "b708a75e-8c86-4ba7-9d7c-ba04b43f4838",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response)\r",
+											"console.log(response.errors)\r",
+											"console.log(response.errors.msg)\r",
+											"\r",
+											"pm.test(\"Status code is 422\", function () {\r",
+											"    pm.response.to.have.status(422);\r",
+											"});\r",
+											"pm.test(\"It should NOT POST a city that already exists\", function () {\r",
+											"    pm.expect(response).to.be.an(\"object\");\r",
+											"    pm.expect(response).to.have.property(\"errors\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "Nish",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/cities",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"cities"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/cities - get a city by the given id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "7a37fa64-8427-4e9b-9995-314bdcf3b356",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response)\r",
+											"console.log(response.name)\r",
+											"console.log(response._id)\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Get a city by the given id \", function () {\r",
+											"    pm.expect(response).to.be.an(\"object\");\r",
+											"    pm.expect(response).to.have.property(\"name\");\r",
+											"    pm.expect(response).to.have.property(\"_id\");\r",
+											"    pm.expect(response._id).to.equal(pm.environment.get(\"CityId\"));\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "",
+										"type": "text",
+										"value": "",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{BaseUrl}}/cities/get?id={{CityId}}",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"cities",
+										"get"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "{{CityId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/cities - get a city by the given id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "f2caad91-aad9-4d40-92a8-94335bc2f185",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response)\r",
+											"console.log(response.name)\r",
+											"console.log(response._id)\r",
+											"\r",
+											"pm.environment.set(\"CityName\", response.name);\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"It should GET a city by the given id \", function () {\r",
+											"    pm.expect(response).to.be.an(\"object\");\r",
+											"    pm.expect(response).to.have.property(\"name\");\r",
+											"    pm.expect(response).to.have.property(\"_id\");\r",
+											"    pm.expect(response.name).to.equal(pm.environment.get(\"CityName\"));\r",
+											"    pm.expect(response._id).to.equal(pm.environment.get(\"CityId\"));\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "",
+										"type": "text",
+										"value": "",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "Nishhh",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/cities/get?id={{CityId}}",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"cities",
+										"get"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "{{CityId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/cities - delete a city by the id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "4caaa1d4-2050-49c5-882d-e9e0350d4ab3",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response)\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"It should DELETE a city given the id\", function () {\r",
+											"    pm.expect(response).to.be.an(\"object\");\r",
+											"    pm.expect(response.msg).to.eql(\"DELETED\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "Admin env",
+										"key": "",
+										"type": "text",
+										"value": "",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{BaseUrl}}/cities/delete?id={{CityId}}",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"cities",
+										"delete"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "{{CityId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Profile",
+					"item": [
+						{
+							"name": "/login -  get token (profile)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "3715f45b-106d-4b16-bde5-836a14d989ed",
+										"exec": [
+											"\r",
+											"let response = pm.response.json();\r",
+											"console.log(response)\r",
+											"let token = response.token\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"It should GET token (profile)\", function () {\r",
+											"    pm.expect(response).to.be.an(\"object\");\r",
+											"    pm.expect(response).to.have.property(\"token\");\r",
+											"});\r",
+											"\r",
+											"pm.environment.set(\"Token\", response.token);\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "f7f9276f-1970-45a6-8a2f-a2ac001c1205",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "email",
+											"value": "{{Email}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "{{Password}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/login",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/profile - not be able to consume the route",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "2baa70e8-323c-4d20-9470-728eaa5aea99",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response);\r",
+											"\r",
+											"pm.test(\"Status code is 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{UserToken}}",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{BaseUrl}}/profile",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"profile"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/profile -  get profile",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "f200a282-6b8e-4ff6-b1dc-121bb80699d5",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response);\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"It should get profile\", function () {\r",
+											"    pm.expect(response).to.be.an(\"object\");\r",
+											"    pm.expect(response).to.have.property(\"email\");\r",
+											"    pm.expect(response).to.have.property(\"name\");\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BaseUrl}}/profile",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"profile"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/profile - not update profile empty name",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "ee8f3742-61c3-429e-bd5d-acecef754baf",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response);\r",
+											"console.log(response.errors);\r",
+											"\r",
+											"pm.test(\"Status code is 422\", function () {\r",
+											"    pm.response.to.have.status(422);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"It should NOT UPDATE profile empty name\", function () {\r",
+											"    pm.expect(response).to.be.an(\"object\");\r",
+											"    pm.expect(response).to.have.property(\"errors\");\r",
+											"    });"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/profile",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"profile"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/profile - update profile",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "f4f0fc62-6690-4c49-9f54-0f4f652ce009",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response);\r",
+											"console.log(response.name);\r",
+											"console.log(response.urlTwitter);\r",
+											"console.log(response.urlGitHub);\r",
+											"console.log(response.city);\r",
+											"console.log(response.phone);\r",
+											"console.log(response.country);\r",
+											"\r",
+											"pm.environment.set(\"UserName\", response.name);\r",
+											"pm.environment.set(\"UserTwitter\", response.urlTwitter);\r",
+											"pm.environment.set(\"UserGitHub\", response.urlGitHub);\r",
+											"pm.environment.set(\"UserCity\", response.city);\r",
+											"pm.environment.set(\"UserPhone\", response.phone);\r",
+											"pm.environment.set(\"UserCountry\", response.country);\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"It should UPDATE profile\", function () {\r",
+											"    pm.expect(response).to.be.an(\"object\");\r",
+											"    pm.expect(response.name).to.equal(pm.environment.get(\"UserName\"));\r",
+											"    pm.expect(response.urlGitHub).to.equal(pm.environment.get(\"UserGitHub\"));\r",
+											"    pm.expect(response.urlTwitter).to.equal(pm.environment.get(\"UserTwitter\"));\r",
+											"    pm.expect(response.city).to.equal(pm.environment.get(\"UserCity\"));\r",
+											"    pm.expect(response.phone).to.equal(pm.environment.get(\"UserPhone\"));\r",
+											"    pm.expect(response.country).to.equal(pm.environment.get(\"UserCountry\"));\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "Test123456",
+											"type": "text"
+										},
+										{
+											"key": "urlTwitter",
+											"value": "https://hello.com",
+											"type": "text"
+										},
+										{
+											"key": "urlGitHub",
+											"value": "https://hello.io",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "123456789",
+											"type": "text"
+										},
+										{
+											"key": "city",
+											"value": "Bucaramanga",
+											"type": "text"
+										},
+										{
+											"key": "country",
+											"value": "Colombia",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/profile",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"profile"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/profile - email aready exists",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "7bea13ce-8b37-4a18-a2ff-318e3ffd382d",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response);\r",
+											"console.log(response.errors);\r",
+											"\r",
+											"pm.test(\"Status code is 422\", function () {\r",
+											"    pm.response.to.have.status(422);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"It should NOT UPDATE profile with email that already exists\", function () {\r",
+											"    pm.expect(response).to.be.an(\"object\");\r",
+											"    pm.expect(response).to.have.property(\"errors\");\r",
+											"\r",
+											"\r",
+											"\r",
+											"\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "email",
+											"value": "admin@admin.com",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/profile",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"profile"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/profile - not valid URLs",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "83b74924-21f8-4d54-bcdf-53c42c0d1206",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response);\r",
+											"console.log(response.errors.msg[0]);\r",
+											"console.log(response.errors.msg[0].msg);\r",
+											"\r",
+											"pm.test(\"Status code is 422\", function () {\r",
+											"    pm.response.to.have.status(422);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"It should NOT UPDATE profile with not valid URL´s\", function () {\r",
+											"    pm.expect(response).to.be.an(\"object\");\r",
+											"     pm.expect(response).to.have.property(\"errors\");\r",
+											"     pm.expect(response.errors.msg[0]).to.have.property(\"msg\");\r",
+											"     pm.expect(response.errors.msg[0].msg).to.equal(\"NOT_A_VALID_URL\");\r",
+											"\r",
+											"\r",
+											" \r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "Test123456",
+											"type": "text"
+										},
+										{
+											"key": "urlTwitter",
+											"value": "hello",
+											"type": "text"
+										},
+										{
+											"key": "urlGitHub",
+											"value": "hello",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "123456789",
+											"type": "text"
+										},
+										{
+											"key": "city",
+											"value": "Bucaramanga",
+											"type": "text"
+										},
+										{
+											"key": "country",
+											"value": "Colombia",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/profile",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"profile"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/profile/changdePassword -  not change password",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "99f64eca-4cd2-41ab-a2fe-aef44ac402fd",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response)\r",
+											"console.log(response.errors)\r",
+											"console.log(response.errors.msg)\r",
+											"\r",
+											"\r",
+											"pm.test(\"Status code is 409\", function () {\r",
+											"    pm.response.to.have.status(409);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"It should NOT change a password\", function () {\r",
+											"    pm.expect(response).to.be.an(\"object\");\r",
+											"    pm.expect(response).to.have.property(\"errors\");\r",
+											"    pm.expect(response.errors).to.have.property(\"msg\");\r",
+											"    pm.expect(response.errors.msg).to.eql(\"WRONG_PASSWORD\");\r",
+											"\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "oldPassword",
+											"value": "{{Password}}",
+											"type": "text"
+										},
+										{
+											"key": "newPassword",
+											"value": "1234567",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/profile/changePassword",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"profile",
+										"changePassword"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/profile/changdePassword - short password",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "fdb6d921-b415-45e0-8b4c-1b61290db209",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response)\r",
+											"console.log(response.errors)\r",
+											"console.log(response.errors.msg[0])\r",
+											"console.log(response.errors.msg[0].msg)\r",
+											"\r",
+											"pm.test(\"Status code is 422\", function () {\r",
+											"    pm.response.to.have.status(422);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"It should NOT change a too short password\", function () {\r",
+											"    pm.expect(response).to.be.an(\"object\");\r",
+											"    pm.expect(response).to.have.property(\"errors\");\r",
+											"    pm.expect(response.errors.msg[0]).to.have.property(\"msg\");\r",
+											"    pm.expect(response.errors.msg[0].msg).to.eql(\"PASSWORD_TOO_SHORT_MIN_5\");\r",
+											"\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "oldPassword",
+											"value": "123456",
+											"type": "text"
+										},
+										{
+											"key": "newPassword",
+											"value": "1234",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/profile/changePassword",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"profile",
+										"changePassword"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/profile/changdePassword - change password",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c5093d07-cf78-4d82-81db-c791f9e4c059",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response)\r",
+											"console.log(response.msg)\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"It should change password\", function () {\r",
+											"    pm.expect(response).to.be.an(\"object\");\r",
+											"      pm.expect(response.msg).to.eql(\"PASSWORD_CHANGED\");\r",
+											"\r",
+											"\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "oldPassword",
+											"value": "12345",
+											"type": "text"
+										},
+										{
+											"key": "newPassword",
+											"value": "123456",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/profile/changePassword",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"profile",
+										"changePassword"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Users",
+					"item": [
+						{
+							"name": "/login - get token as admin",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "ad4018e7-d83e-4689-bba6-27085547c545",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response)\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Get token as admin\", function () {\r",
+											"    pm.expect(response).to.be.an(\"object\");\r",
+											"    pm.expect(response).to.have.property(\"token\");\r",
+											"});\r",
+											"\r",
+											"pm.environment.set(\"Token\", response.token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "email",
+											"value": "{{Email}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "{{Password}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/login",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/login - get token as user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "73ebf77e-de7e-4f12-8c27-63292369cf72",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response)\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"It should get token as user\", function () {\r",
+											"    pm.expect(response).to.be.an(\"object\");\r",
+											"    pm.expect(response).to.have.property(\"token\");\r",
+											"});\r",
+											"\r",
+											"pm.environment.set(\"UserToken\", response.token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "email",
+											"value": "user@user.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "12345",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/login",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/ users - get all the users",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "7d525ea3-7199-4b35-8931-b2ad98c72f05",
+										"exec": [
+											"\r",
+											"let response = pm.response.json();\r",
+											"console.log(response)\r",
+											"console.log(response.docs)\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Get all the users\", function () {\r",
+											"    pm.expect(response).to.be.an(\"object\");\r",
+											"    pm.expect(response).to.have.property(\"docs\");\r",
+											"    pm.expect(response.docs).to.have.an(\"array\");\r",
+											"});\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{BaseUrl}}/users",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/users - not be able to consume the route",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "1a78d06a-a72a-4339-a97e-db5db64d4ffb",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response)\r",
+											"\r",
+											"pm.test(\"Status code is 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BaseUrl}}/users",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/users - get the users with the filters",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "5473ce07-b20a-4889-84ba-deb3a140c4ad",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response)\r",
+											"console.log(response.docs)\r",
+											"console.log(response.docs.length)\r",
+											"console.log(response.docs[0])\r",
+											"console.log(response.docs[0].email)\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Get the users with the filters\", function () {\r",
+											"    pm.expect(response).to.be.an(\"object\");\r",
+											"    pm.expect(response).to.have.property(\"docs\");\r",
+											"    pm.expect(response.docs).to.have.an(\"array\");\r",
+											"    pm.expect(response.docs).to.have.lengthOf(1)\r",
+											"    pm.expect(response.docs[0]).to.have.property(\"email\");\r",
+											"    pm.expect(response.docs[0].email).to.equal(\"admin@admin.com\");\r",
+											"});\r",
+											"\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/users?filter=admin&sort=email&order=1",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"users"
+									],
+									"query": [
+										{
+											"key": "filter",
+											"value": "admin"
+										},
+										{
+											"key": "sort",
+											"value": "email"
+										},
+										{
+											"key": "order",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/users - not post a user without name",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "d9ee5cab-4d61-4ec1-bc84-26dc8f0ddfd5",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response)\r",
+											"console.log(response.errors)\r",
+											"\r",
+											"pm.test(\"Not post a user without name\", function () {\r",
+											"    pm.response.to.have.status(422);\r",
+											"    pm.expect(response).to.be.an(\"object\");\r",
+											"    pm.expect(response).to.have.property(\"errors\");\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "",
+										"value": "",
+										"description": "Admin env",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "eeeee@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123456789",
+											"type": "text"
+										},
+										{
+											"key": "role",
+											"value": "user",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "2563987",
+											"type": "text"
+										},
+										{
+											"key": "city",
+											"value": "Cali",
+											"type": "text"
+										},
+										{
+											"key": "country",
+											"value": "Serbia",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/users",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/users - should post a user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "eb961b1e-bce5-4c6c-9467-2280c647a64a",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response)\r",
+											"console.log(response._id);\r",
+											"console.log(response.name);\r",
+											"console.log(response.email);\r",
+											"console.log(response.verification);\r",
+											"\r",
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Should post a user\", function () {\r",
+											"    pm.expect(response).to.be.an(\"object\");\r",
+											"    pm.expect(response).to.have.property(\"_id\");\r",
+											"    pm.expect(response).to.have.property(\"name\");\r",
+											"    pm.expect(response).to.have.property(\"email\");\r",
+											"    pm.expect(response).to.have.property(\"verification\");\r",
+											"});\r",
+											"\r",
+											"pm.environment.set(\"AdminUserId\", response._id);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "",
+										"value": "",
+										"description": "Admin env",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "Zikica ZIkic",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "zika@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123456",
+											"type": "text"
+										},
+										{
+											"key": "role",
+											"value": "user",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "2563987",
+											"type": "text"
+										},
+										{
+											"key": "city",
+											"value": "Chicago",
+											"type": "text"
+										},
+										{
+											"key": "country",
+											"value": "Serbia",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/users",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/users - not post a user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "e8d5c708-12c2-4486-8cc1-1080c6dc6d48",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response)\r",
+											"console.log(response.errors);\r",
+											"console.log(response.errors.msg);\r",
+											"\r",
+											"pm.test(\"Status code is 422\", function () {\r",
+											"    pm.response.to.have.status(422);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"It should NOT POST a user with email that already exists\", function () {\r",
+											"    pm.expect(response).to.be.an(\"object\");\r",
+											"    pm.expect(response).to.have.property(\"errors\");\r",
+											"    pm.expect(response.errors).to.have.property(\"msg\");\r",
+											"\r",
+											"});\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"description": "Admin env",
+										"key": "",
+										"type": "text",
+										"value": "",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "Zika ZIka",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "zika@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123456",
+											"type": "text"
+										},
+										{
+											"key": "role",
+											"value": "user",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "2563987",
+											"type": "text"
+										},
+										{
+											"key": "city",
+											"value": "Chicago",
+											"type": "text"
+										},
+										{
+											"key": "country",
+											"value": "Serbia",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/users",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/users - not post user with not known role",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "b2c3155f-b6bd-4973-96b7-faf9e14b2f44",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response)\r",
+											"console.log(response.errors);\r",
+											"console.log(response.errors.msg)\r",
+											"\r",
+											"pm.test(\"Status code is 422\", function () {\r",
+											"    pm.response.to.have.status(422);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Not post users with not konwn role\", function () {\r",
+											"    pm.expect(response).to.be.an(\"object\");\r",
+											"    pm.expect(response).to.have.property(\"errors\");\r",
+											"});\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"description": "Admin env",
+										"key": "",
+										"type": "text",
+										"value": "",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "Zikic ZIkic",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "zzzz@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123456",
+											"type": "text"
+										},
+										{
+											"key": "role",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "2563987",
+											"type": "text"
+										},
+										{
+											"key": "city",
+											"value": "Chicago",
+											"type": "text"
+										},
+										{
+											"key": "country",
+											"value": "Serbia",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/users",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/users/:id - get a user by the given id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "fd19a745-4288-4139-a309-92d8b6b1a098",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response)\r",
+											"console.log(response.name)\r",
+											"console.log(response._id)\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Get a user by the given id \", function () {\r",
+											"    pm.expect(response).to.be.an(\"object\");\r",
+											"    pm.expect(response).to.have.property(\"name\");\r",
+											"    pm.expect(response).to.have.property(\"_id\");\r",
+											"    pm.expect(response._id).to.equal(pm.environment.get(\"AdminUserId\"));\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "",
+										"value": "",
+										"description": "Admin env",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{BaseUrl}}/users/get?id={{AdminUserId}}",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"users",
+										"get"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "{{AdminUserId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/users - update a user given the id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "5030de07-130f-4261-8f41-f48ed355b186",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response)\r",
+											"console.log(response._id);\r",
+											"console.log(response.name);\r",
+											"\r",
+											"pm.environment.set(\"AdminUserName\", response.name);\r",
+											"pm.environment.set(\"AdminUserEmail\", response.email);\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"It shoul UPDATE a user given the id\", function () {\r",
+											"    pm.expect(response).to.be.an(\"object\");\r",
+											"    pm.expect(response).to.have.property(\"name\");\r",
+											"    pm.expect(response.name).to.eql(pm.environment.get(\"AdminUserName\"));\r",
+											"    pm.expect(response._id).to.eql(pm.environment.get(\"AdminUserId\"));\r",
+											"    pm.expect(response.email).to.eql(pm.environment.get(\"AdminUserEmail\"));\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "597518e3-fed2-4710-86c1-ca8ca95bd401",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "",
+										"value": "",
+										"description": "Admin env",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "Mika Mikica",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "mika@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123456",
+											"type": "text"
+										},
+										{
+											"key": "role",
+											"value": "user",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "2563987",
+											"type": "text"
+										},
+										{
+											"key": "city",
+											"value": "Chicago",
+											"type": "text"
+										},
+										{
+											"key": "country",
+											"value": "Serbia",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/users/{{AdminUserId}}",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"users",
+										"{{AdminUserId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/users - should post a user (deleting test)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "d6553639-7425-4463-be6c-04b8c8a272dd",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response)\r",
+											"console.log(response._id);\r",
+											"console.log(response.name);\r",
+											"console.log(response.email);\r",
+											"console.log(response.verification);\r",
+											"\r",
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Should post a user(deleting test)\", function () {\r",
+											"    pm.expect(response).to.be.an(\"object\");\r",
+											"    pm.expect(response).to.have.property(\"_id\");\r",
+											"    pm.expect(response).to.have.property(\"name\");\r",
+											"    pm.expect(response).to.have.property(\"email\");\r",
+											"    pm.expect(response).to.have.property(\"verification\");\r",
+											"});\r",
+											"\r",
+											"pm.environment.set(\"AdminUserId\", response._id);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"description": "Admin env",
+										"key": "",
+										"type": "text",
+										"value": "",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "Mika Mikic",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "mmmika@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123456",
+											"type": "text"
+										},
+										{
+											"key": "role",
+											"value": "user",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "352014",
+											"type": "text"
+										},
+										{
+											"key": "city",
+											"value": "Chicago",
+											"type": "text"
+										},
+										{
+											"key": "country",
+											"value": "Serbia",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/users",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/user/:id - delete a user given the id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "06935012-518d-4f32-ad77-a13ca86320e2",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response)\r",
+											"console.log(response.msg)\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(\"It should delete a user given the id\", function () {\r",
+											"    pm.expect(response).to.be.an(\"object\");\r",
+											"    pm.expect(response.msg).to.eql(\"DELETED\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "",
+										"type": "text",
+										"value": "",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{BaseUrl}}/users/delete?id={{AdminUserId}}",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"users",
+										"delete"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "{{AdminUserId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/users - not update user - email aready exists",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "0b36cefc-3cf8-403d-a770-2a6cb6898906",
+										"exec": [
+											"let response = pm.response.json();\r",
+											"console.log(response);\r",
+											"console.log(response.errors)\r",
+											"\r",
+											"pm.test(\"Status code is 422\", function () {\r",
+											"    pm.response.to.have.status(422);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"It should NOT UPDATE a user with email that already exists\", function () {\r",
+											"    pm.expect(response).to.be.an(\"object\"); \r",
+											"    pm.expect(response).to.have.property(\"errors\");\r",
+											"    \r",
+											"    });"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "email",
+											"value": "admin@admin.com",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/users/{{AdminUserId}}",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"users",
+										"{{AdminUserId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Api calls",
+			"item": [
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "{{URL}}/register",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "Marina P",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "marinica86@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "12345",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/register",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{URL}}/verify",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "id",
+											"value": "c2f2f514-ba62-4901-a050-89830f7ec812",
+											"description": "verification code from My profile",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/verify",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"verify"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{URL}}/forgot",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "email",
+											"value": "{{email}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/forgot",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"forgot"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{URL}}/reset",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "id",
+											"value": "5a107d41-90f3-437d-a5ba-b63f588ddfb8",
+											"description": "id iz mejla",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "marina",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/reset",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"reset"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{URL}}/login",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "email",
+											"value": "{{email}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "{{password}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/login",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{URL}}/token",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{Token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "{{URL}}/token",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"token"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Users (Admin env)",
+					"item": [
+						{
+							"name": "{{URL}}/users",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{Token}}",
+										"type": "text"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "{{URL}}/users?filter=super&page=1&limit=5&sort=email&order=1",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"users"
+									],
+									"query": [
+										{
+											"key": "filter",
+											"value": "super"
+										},
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "limit",
+											"value": "5"
+										},
+										{
+											"key": "sort",
+											"value": "email"
+										},
+										{
+											"key": "order",
+											"value": "1"
+										},
+										{
+											"key": "",
+											"value": null,
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{URL}}/users",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "",
+										"value": "",
+										"description": "Admin env",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "Marina",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "marinica86@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "marinica",
+											"type": "text"
+										},
+										{
+											"key": "role",
+											"value": "user",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "2563987",
+											"type": "text"
+										},
+										{
+											"key": "city",
+											"value": "Cali",
+											"type": "text"
+										},
+										{
+											"key": "country",
+											"value": "Serbia",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/users",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{URL}}/users/delete/?id=5aa1c2c35ef7a4e97b5e995b",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{Token}}",
+										"description": "Admin env",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{URL}}/users/delete/?id=5aa1c2c35ef7a4e97b5e995b",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"users",
+										"delete",
+										""
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "5aa1c2c35ef7a4e97b5e995b",
+											"description": "SImple User deleted"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{URL}}/users/get?id=5aa1c2c35ef7a4e97b5e995b",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{Token}}",
+										"description": "Admin env",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{URL}}/users/get?id=5aa1c2c35ef7a4e97b5e995b",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"users",
+										"get"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "5aa1c2c35ef7a4e97b5e995b"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{URL}}/users/patch?id=5aa1c2c35ef7a4e97b5e995b",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{Token}}",
+										"description": "admin env",
+										"type": "text"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "Marina ",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "89654",
+											"type": "text"
+										},
+										{
+											"key": "city",
+											"value": "Chicago",
+											"type": "text"
+										},
+										{
+											"key": "country",
+											"value": "Serbia",
+											"type": "text"
+										},
+										{
+											"key": "role",
+											"value": "user",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "useri@user.com",
+											"type": "text"
+										},
+										{
+											"key": "",
+											"value": "",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "",
+											"value": "",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/users/patch?id=5aa1c2c35ef7a4e97b5e995b",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"users",
+										"patch"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "5aa1c2c35ef7a4e97b5e995b",
+											"description": "Simple user id"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "57c12d12-804f-4d08-a968-63628b30975c",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "415742c9-2b3f-4be0-bf13-4cd53e021e44",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Cities",
+					"item": [
+						{
+							"name": "{{URL}}/cities?fields=name&filter=B&sort =createdAt&order=1&limit=5&page=1",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{Token}}",
+										"description": "Admin env",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "",
+											"value": "",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "",
+											"value": "",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "",
+											"value": "",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "",
+											"value": "",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "",
+											"value": "",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "",
+											"value": "",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/cities?fields=name&filter=B&sort =createdAt&order=1&limit=5&page=1",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"cities"
+									],
+									"query": [
+										{
+											"key": "fields",
+											"value": "name"
+										},
+										{
+											"key": "filter",
+											"value": "B"
+										},
+										{
+											"key": "sort ",
+											"value": "createdAt"
+										},
+										{
+											"key": "order",
+											"value": "1"
+										},
+										{
+											"key": "limit",
+											"value": "5"
+										},
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{URL}}/cities",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{Token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "Nisss",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/cities",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"cities"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{URL}}/cities/get?id=5eb86e716dffd40d8ab1bd36",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{Token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{URL}}/cities/get?id=5eb8806b6fc451137b878b13",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"cities",
+										"get"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "5eb8806b6fc451137b878b13",
+											"description": "id for New York"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{URL}}/cities/patch?id=5eb86e716dffd40d8ab1bd36",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{Token}}",
+										"description": "Admin env",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "Nis",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/cities/patch?id=5eb86e716dffd40d8ab1bd36",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"cities",
+										"patch"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "5eb86e716dffd40d8ab1bd36"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{URL}}/cities/all",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{Token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{URL}}/cities/all",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"cities",
+										"all"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{URL}}/cities/{id}",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{Token}}",
+										"description": "Admin env",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{URL}}/cities/delete?id=5eb8806b6fc451137b878b12",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"cities",
+										"delete"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "5eb8806b6fc451137b878b12",
+											"description": "San Francisko"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Profile (Admin & user env)",
+					"item": [
+						{
+							"name": "{{URL}}/profile",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{Token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{URL}}/profile",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"profile"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{URL}}/profile",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{Token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "Marinica",
+											"type": "text"
+										},
+										{
+											"key": "urlTwitter",
+											"value": "https://twitter.com/explore",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "12369",
+											"type": "text"
+										},
+										{
+											"key": "city",
+											"value": "Chicago",
+											"type": "text"
+										},
+										{
+											"key": "country",
+											"value": "Usa",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/profile",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"profile"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{URL}}/profile/changePassword",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{Token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "oldPassword",
+											"value": "123456",
+											"type": "text"
+										},
+										{
+											"key": "newPassword",
+											"value": "123456789",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/profile/changePassword",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"profile",
+										"changePassword"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
