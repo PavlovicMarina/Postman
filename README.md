@@ -1,6 +1,6 @@
 # Postman
 
-`Testing app.postman_collection.json` contains folders Tests and Api calls.
+`Testing app.postman_collection.json` contains Tests and Api calls.
 
 For testing I used [**Chai Assertion Library**]( https://www.chaijs.com/)
 
